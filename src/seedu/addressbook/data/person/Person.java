@@ -5,8 +5,8 @@ import seedu.addressbook.data.tag.UniqueTagList;
 import java.util.Objects;
 
 /**
- * Represents a Person in the address book.
- * Guarantees: details are present and not null, field values are validated.
+ * Represents a Person in the address book. Guarantees: details are present and
+ * not null, field values are validated.
  */
 public class Person implements ReadOnlyPerson {
 
@@ -14,17 +14,23 @@ public class Person implements ReadOnlyPerson {
     private Phone phone;
     private Email email;
     private Address address;
+    private int sequenceNumber;
+    private static int nextSequenceNumber;
+    private static final int ORIGINAL = 1;
 
     private final UniqueTagList tags;
+
     /**
      * Assumption: Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, UniqueTagList tags) {
+        this.sequenceNumber = nextSequenceNumber++;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.tags = new UniqueTagList(tags); // protect internal tags from changes in the arg list
+        this.tags = new UniqueTagList(tags); // protect internal tags from
+                                             // changes in the arg list
     }
 
     /**
@@ -59,6 +65,17 @@ public class Person implements ReadOnlyPerson {
         return new UniqueTagList(tags);
     }
 
+    public int getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    /**
+     * Reset back to ORIGINAL if necessary.
+     */
+    public void setNextSequenceNumber() {
+        nextSequenceNumber = ORIGINAL;
+    }
+
     /**
      * Replaces this person's tags with the tags in the argument tag list.
      */
@@ -70,12 +87,13 @@ public class Person implements ReadOnlyPerson {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof ReadOnlyPerson // instanceof handles nulls
-                && this.isSameStateAs((ReadOnlyPerson) other));
+                        && this.isSameStateAs((ReadOnlyPerson) other));
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
+        // use this method for custom fields hashing instead of implementing
+        // your own
         return Objects.hash(name, phone, email, address, tags);
     }
 
